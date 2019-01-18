@@ -4,8 +4,8 @@ wait-until-event pattern, in the context of robot motion that uses sensors.
 
 Authors: David Mutchler, Vibha Alangar, Matt Boutell, Dave Fisher,
          Mark Hays, Amanda Stouder, Aaron Wilkin, their colleagues,
-         and PUT_YOUR_NAME_HERE.
-"""  # TODO: 1. PUT YOUR NAME IN THE ABOVE LINE.
+         and Zichen Tan.
+"""  # Done: 1. PUT YOUR NAME IN THE ABOVE LINE.
 
 import ev3dev.ev3 as ev3
 import time
@@ -38,7 +38,7 @@ def run_test_wait_for_seconds():
 def wait_for_seconds():
     """ Prints Hello, waits for 3 seconds, then prints Goodbye. """
     # -------------------------------------------------------------------------
-    # TODO: 2. With your instructor, implement and test this function.
+    # dONE: 2. With your instructor, implement and test this function.
     #   IMPORTANT:  Do NOT use the    time.sleep   function
     #               anywhere in this project.
     #               (Exception: Use it in test-functions to separate tests.)
@@ -51,6 +51,13 @@ def wait_for_seconds():
     #   NOTE: this function has nothing to do with robots,
     #   but its concepts will be useful in the forthcoming robot exercises.
     # -------------------------------------------------------------------------
+    print('Hello')
+    start=time.time()
+    while True:
+        current=time.time()
+        if current-start>=1:
+            break
+    print ('good bye')
 
 
 def run_test_init():
@@ -60,9 +67,11 @@ def run_test_init():
     print('Testing the   __init__   method of the SimpleRoseBot class:')
     print('--------------------------------------------------')
     # -------------------------------------------------------------------------
-    # TODO: 3. Implement this function, then implement the   __init__   method
+    # D: 3. Implement this function, then implement the   __init__   method
     #   of the SimpleRoseBot class, then use this function to test __init__.
     # -------------------------------------------------------------------------
+    SimpleRoseBot()
+
 
 
 def run_test_go_and_stop():
@@ -72,12 +81,15 @@ def run_test_go_and_stop():
     print('Testing the  go  and  stop  methods of the SimpleRoseBot class:')
     print('--------------------------------------------------')
     # -------------------------------------------------------------------------
-    # TODO: 4. Implement this function, then implement the   go  and   stop
+    # D: 4. Implement this function, then implement the   go  and   stop
     #   methods of the SimpleRoseBot class, then use this function
     #   to test both   go   and   stop   at the same time.
     # -------------------------------------------------------------------------
-
-
+    a=SimpleRoseBot()
+    a.go(100,100)
+    wait_for_seconds()
+    a.stop()
+    a.gi()
 def run_test_go_straight_for_seconds():
     """ Tests the   go_straight_for_seconds   method of SimpleRoseBot. """
     print()
@@ -85,11 +97,15 @@ def run_test_go_straight_for_seconds():
     print('Testing the   go_straight_for_seconds   method of SimpleRoseBot:')
     print('--------------------------------------------------')
     # -------------------------------------------------------------------------
-    # TODO: 5. Implement this function, then implement the
+    # doNE: 5. Implement this function, then implement the
     #   go_straight_for_seconds   method of the SimpleRoseBot class,
     #   then use this function to test that method.
     # -------------------------------------------------------------------------
-
+    a=SimpleRoseBot()
+    a.go(100,100)
+    wait_for_seconds()
+    a.stop()
+    a.gi()
 
 def run_test_go_straight_for_inches():
     """ Tests the   go_straight_for_inches   method of SimpleRoseBot. """
@@ -102,7 +118,11 @@ def run_test_go_straight_for_inches():
     #   go_straight_for_inches   method of the SimpleRoseBot class,
     #   then use this function to test that method.
     # -------------------------------------------------------------------------
-
+    a=SimpleRoseBot()
+    a.go(100,100)
+    wait_for_seconds()
+    a.stop()
+    a.gi()
 
 def run_test_go_straight_until_black():
     """ Tests the   go_straight_until_black   method of SimpleRoseBot. """
@@ -111,16 +131,48 @@ def run_test_go_straight_until_black():
     print('Testing the   go_straight_until_black   method of SimpleRoseBot:')
     print('--------------------------------------------------')
     # -------------------------------------------------------------------------
-    # TODO: 7. Implement this function, then implement the
+    # D: 7. Implement this function, then implement the
     #   go_straight_until_black   method of the SimpleRoseBot class,
     #   then use this function to test that method.
     # -------------------------------------------------------------------------
-
+    a=SimpleRoseBot()
+    a.go(100,100)
+    a.runb()
 
 ###############################################################################
 # Put your   SimpleRoseBot    class here (below this comment).
 # Your instructor may help you get started.
 ###############################################################################
+class SimpleRoseBot(object):
+    def __init__(self):
+        self.lm=Motor("B")
+        self.rm=Motor('C')
+        self.color=ColorSensor(3)
+
+    def go(self,ls,rs):
+        self.lm.turn_on(ls)
+        self.rm.turn_on(rs)
+    def stop(self):
+        self.lm.turn_off()
+        self.rm.turn_off()
+    def gi(self):
+        li=self.lm.get_position()
+        ri=self.rm.get_position()
+        print(li,ri)
+        self.lm.reset_position()
+        self.rm.reset_position()
+
+    def runb(self):
+        while True:
+
+
+            a=self.color.get_reflected_light_intensity()
+            if a==100:
+                self.stop()
+
+
+
+
 
 
 ###############################################################################
@@ -145,6 +197,9 @@ class Motor(object):
         self._motor.position = 0
 
 
+
+
+
 class ColorSensor(object):
     def __init__(self, port):  # port must be 3
         self._color_sensor = ev3.ColorSensor('in' + str(port))
@@ -159,3 +214,5 @@ class ColorSensor(object):
 # Calls  main  to start the ball rolling.
 # -----------------------------------------------------------------------------
 main()
+
+
